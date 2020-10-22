@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <script>
+            function descargarArchivo() {
+                var peticion_http = new XMLHttpRequest();
+                peticion_http.onreadystatechange = muestraContenido;
+                peticion_http.open('GET','http://localhost/AJAX/holamundo.txt',true);
+                peticion_http.send();
+
+                function muestraContenido(){
+                    if ((peticion_http.readyState == 4) && (peticion_http.status == 200)){
+                        //alert(peticion_http.responseText);
+                        var oRes = JSON.parse(peticion_http.responseText);
+                        var parrafo;
+                        document.getElementById('1').innerText = oRes.div1;
+                        document.getElementById('2').innerText = oRes.div2;
+                        
+                        for (var i = 0; i < oRes.parrafos ;i++){
+                            parrafo = document.createElement("p");
+                            parrafo.append(oRes.contenido);
+                            document.getElementById('3').append(parrafo);
+                        }
+                    }
+                }
+            }
+
+            window.onload = descargarArchivo;
+        </script>
+    </head>
+    <body>
+        <div id="1"></div>
+        <div id="2"></div>
+        <div id="3"></div>
+    </body>
+</html>
