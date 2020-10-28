@@ -20,7 +20,7 @@ switch ($servicio) {
         listadoProvincias();
         break;
     case "localidades":
-				listadoLocalidades();
+		listadoLocalidades();
         break;
 }
 

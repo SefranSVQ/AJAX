@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script src="utilAjax.js"></script>
+        <script>
+            
+            window.onload = () => {
+                solicitarPeticionAJAX("GET","provinciaslocalidades/servidor.php?servicio=provincias", (datos)=>{
+                    console.log(datos);
+                    var parrafo;
+                    for (var i = 0; i < datos.length ; i++){
+                        parrafo = document.createElement("p");
+                        parrafo.innerHTML = datos[i].CODIGO+" - "+datos[i].NOMBRE;
+                        document.getElementById("prueba").append(parrafo);
+                    }
+                });
+            }
+        </script>
+    </head>
+    <body>
+        <div id="prueba"></div>
+    </body>
+</html>

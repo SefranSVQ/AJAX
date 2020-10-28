@@ -4,14 +4,21 @@
         <meta charset="UTF-8"/>
         <script>
             function descargarArchivo() {
+                // Instanciamos el objeto XMLHttpRequest, necesario para realizar
+                // comunicaciones con el servidor
                 var peticion_http = new XMLHttpRequest();
+                // Cuando se reciba una petición del servidor, se ejecutará la función "muestraContenido"
                 peticion_http.onreadystatechange = muestraContenido;
+                // Se realiza la petición http (get) al servidor (nuestro servidor de xampp)
                 peticion_http.open('GET','http://localhost/AJAX/holamundo.txt',true);
                 peticion_http.send();
 
                 function muestraContenido(){
                     if ((peticion_http.readyState == 4) && (peticion_http.status == 200)){
-                        //alert(peticion_http.responseText);
+                        // Mostramos en un alert la información
+                        alert(peticion_http.responseText);
+
+                        // Ejercicio parseando el resultado de la devolucion a json y realizando operaciones con ello.
                         var oRes = JSON.parse(peticion_http.responseText);
                         var parrafo;
                         document.getElementById('1').innerText = oRes.div1;

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Provincias Localidades</title>
+	<script src="../utilAjax.js"></script>
+	<script type="text/javascript">
+
+		const llenaSelect = (select, arrObj) => {
+			// select -> elemento html que va a ser rellenado de valores
+			// arrObj -> objeto json/array con los valores
+
+			// variables
+			var opcion;
+			var valor;
+			select.length = 0;
+			opcion = document.createElement('option');
+			opcion.innerHTML = "Seleccione una opcion";
+			select.appendChild(opcion);
+			for (var i = 0 ; i < arrObj.length ; i++){
+				opcion = document.createElement('option');
+				valor = document.createTextNode(arrObj[i].NOMBRE);
+				opcion.appendChild(valor);
+				opcion.value = arrObj[i].CODIGO;
+				select.appendChild(opcion);
+			}
+		}
+
+		const cargaProvincias = () => {
+			
+			solicitarPeticionAJAX("GET","servidor.php?servicio=provincias", (datos)=>{
+				const sel = document.getElementById("provincia");
+				llenaSelect(sel, datos);
+			});
+		}
+
+		const cargaLocalidades = () =>{
+			var codigo = document.getElementById('provincia').value;
+			var url = "servidor.php?servicio=localidades&codigop="+codigo;
+			solicitarPeticionAJAX("GET",url, (datos)=>{
+				const sel = document.getElementById("localidad");
+				llenaSelect(sel, datos);
+			});
+		}
+
+		window.onload = () => {
+			cargaProvincias();
+			document.getElementById("provincia").onchange = cargaLocalidades;
+		}
+	</script>
+
+</head>
+
+<body>
+	<h2>Ejemplo proyecto web con JAVA y AJAX</h2>
+
+	<label for="provincia">Provincia:</label>
+	<select id="provincia">
+
+	</select>
+	<br><br>
+
+	<label for="localidad">Localidad</label>
+	<select id="localidad">
+		<option value="-1">Seleccione Provincia</option>
+	</select>
+	<br><br>
+
+</body>
+
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Provincias Localidades</title>
+
+	<script type="text/javascript">
+
+		//  Definimos el objto XMLHttpRequest para hacer peticiones AJAX como 
+		//    variable (constante, que no va a cambiar) global.
+		const peti = new XMLHttpRequest();
+
+		const llenaSelect = (select, arrObj) => {
+			// select -> elemento html que va a ser rellenado de valores
+			// arrObj -> objeto json/array con los valores
+
+			// variables
+			var opcion;
+			var valor;
+			select.length = 0;
+			opcion = document.createElement('option');
+			opcion.innerHTML = "Seleccione una opcion";
+			select.appendChild(opcion);
+			for (var i = 0 ; i < arrObj.length ; i++){
+				opcion = document.createElement('option');
+				valor = document.createTextNode(arrObj[i].NOMBRE);
+				opcion.appendChild(valor);
+				opcion.value = arrObj[i].CODIGO;
+				select.appendChild(opcion);
+			}
+		}
+
+		const cargaProvincias = () => {
+			/* Hacemos la petición AJAX al servidor para que nos devuelva la lista
+			de todas las provincias  (array de objetos)
+			*/
+			peti.onreadystatechange = () => {
+				if ((peti.readyState == 4) && (peti.status == 200)) {
+					//console.log(peti.responseText);
+					const sel = document.getElementById("provincia");
+					llenaSelect(sel, JSON.parse(peti.responseText));
+				}
+			}
+
+			//  Suponemos que este fichero está en la misma carpeta donde está servidor.php
+			peti.open("GET", "servidor.php?servicio=provincias");
+			//  Si el servicio al que llamamos está en la misma carpeta no hay que poner toda la url
+			peti.send();
+			
+		}
+
+		const cargaLocalidades = () =>{
+			/* Hacemos la petición AJAX al servidor para que nos devuelva la lista
+			de todas las localidades  (array de objetos) segun un codigo de prov
+			*/
+			peti.onreadystatechange = () => {
+				if ((peti.readyState == 4) && (peti.status == 200)) {
+					console.log(peti.responseText);
+					const sel = document.getElementById("localidad");
+					llenaSelect(sel, JSON.parse(peti.responseText));
+				}
+			}
+			var codigo = document.getElementById('provincia').value;
+			var url = "servidor.php?servicio=localidades&codigop="+codigo;
+			console.log(url);
+			//  Suponemos que este fichero está en la misma carpeta donde está servidor.php
+			peti.open("GET", url);
+			//  Si el servicio al que llamamos está en la misma carpeta no hay que poner toda la url
+			peti.send();
+
+		}
+
+
+		window.onload = () => {
+			cargaProvincias();
+			document.getElementById("provincia").onchange = cargaLocalidades;
+		}
+	</script>
+
+</head>
+
+<body>
+	<h2>Ejemplo proyecto web con JAVA y AJAX</h2>
+
+	<label for="provincia">Provincia:</label>
+	<select id="provincia">
+
+	</select>
+	<br><br>
+
+	<label for="localidad">Localidad</label>
+	<select id="localidad">
+		<option value="-1">Seleccione Provincia</option>
+	</select>
+	<br><br>
+
+</body>
+
+</html>

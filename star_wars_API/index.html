@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <script src="utilAjax.js"></script>
+        <script>
+            window.onload = () =>{
+                var pagina = 0;
+                var persona;
+                var aTabla = [["Nombre","Altura","Peso","Fecha Nac","Género","Planeta Nac"]];
+                var tabla;
+
+                solicitarPeticionAJAX("GET","https://swapi.dev/api/people/",(datos) => {
+                    var divTabla = document.getElementById("tabla");
+                    for (var i= 0 ; i < datos.results.length ; i++){
+                        aTabla.push([nombre = datos.results[i].name
+                        , altura = datos.results[i].height
+                        , peso = datos.results[i].mass
+                        , fechNac = datos.results[i].birth_year
+                        , genero = datos.results[i].gender
+                        , planetaNac = datos.results[i].homeworld])
+                    }
+
+                    tabla = genTablaPersonajes(aTabla);
+                    divTabla.appendChild(tabla);
+                    divTabla.append(tabla);
+                });
+            }
+        </script>
+    </head>
+    <body>
+        <div  id="tabla">
+        </div>
+    </body>
+</html>
